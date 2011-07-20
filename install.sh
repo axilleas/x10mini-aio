@@ -1,20 +1,22 @@
 #!/system/bin/sh
 
+mtd=mount | grep system | awk '{print $1}'
+
 xrecovery()
 {
 echo "Mounting /system rw"
-mount -o remount,rw -t yaffs2 /dev/block/mtdblock2 /system
+mount -o remount,rw -t yaffs2 $mtd /system
 sleep 1
 echo "Copying Xrecovery data files"
-busybox cp -f data/busybox /system/bin/busybox
-busybox cp -f data/chargemon.x10pro /system/bin/chargemon
-busybox cp -f data/xrecovery.tar /system/bin/xrecovery.tar
+busybox cp -f xrecovery/busybox /system/bin/busybox
+busybox cp -f xrecovery/chargemon.x10pro /system/bin/chargemon
+busybox cp -f xrecovery/xrecovery.tar /system/bin/xrecovery.tar
 echo "Done!"
 sleep 1
-echo "CHMOD permissions to 777"
-busybox chmod 777 /system/bin/busybox
-busybox chmod 777 /system/bin/chargemon
-busybox chmod 777 /system/bin/xrecovery.tar
+echo "CHMOD permissions to 755"
+busybox chmod 755 /system/bin/busybox
+busybox chmod 755 /system/bin/chargemon
+busybox chmod 755 /system/bin/xrecovery.tar
 echo "Done!"
 sleep 1
 echo "Count down to reboot your phone..."
@@ -38,10 +40,10 @@ busybox cp -f data/chargemon.x10mini /system/bin/chargemon
 busybox cp -f data/xrecovery.tar /system/bin/xrecovery.tar
 echo "Done!"
 sleep 1
-echo "CHMOD permissions to 777"
-busybox chmod 777 /system/bin/busybox
-busybox chmod 777 /system/bin/chargemon
-busybox chmod 777 /system/bin/xrecovery.tar
+echo "CHMOD permissions to 755"
+busybox chmod 755 /system/bin/busybox
+busybox chmod 755 /system/bin/chargemon
+busybox chmod 755 /system/bin/xrecovery.tar
 echo "Done!"
 sleep 1
 echo "Count down to reboot your phone..."
@@ -57,15 +59,15 @@ reboot
 jit()
 {
 echo "Mounting /system rw"
-mount -o remount,rw -t yaffs2 /dev/block/mtdblock2 /system
+mount -o remount,rw -t yaffs2 $mtd /system
 sleep 1
 echo "Enable Jit"
 echo ""
 sleep 1
-echo "Copying JIT data files to /system/"
-busybox cp -f data/jit/dalvikvm /system/bin/dalvikvm
-busybox cp -f data/jit/dexopt /system/bin/dexopt
-busybox cp -f data/jit/logcat /system/bin/logcat
+echo "Copying JIT data files to /system/bin"
+busybox cp -f jit/dalvikvm /system/bin/dalvikvm
+busybox cp -f jit/dexopt /system/bin/dexopt
+busybox cp -f jit/logcat /system/bin/logcat
 echo "Done!"
 sleep 1
 echo "CHMOD permissions to 755"
@@ -74,14 +76,14 @@ busybox chmod 755 /system/bin/dexopt
 busybox chmod 755 /system/bin/logcat
 echo "Done!"
 sleep 1
-echo "Copying libraries to /system/"
-busybox cp -f data/jit/libdvm.so /system/lib/libdvm.so
-busybox cp -f data/jit/libnativehelper.so /system/lib/libnativehelper.so
-busybox cp -f data/jit/libcutils.so /system/lib/libcutils.so
-busybox cp -f data/jit/libdl.so /system/lib/libdl.so
-busybox cp -f data/jit/liblog.so /system/lib/liblog.so
-busybox cp -f data/jit/libm.so /system/lib/libm.so
-busybox cp -f data/jit/libz.so /system/lib/libz.so
+echo "Copying libraries to /system/lib"
+busybox cp -f jit/libdvm.so /system/lib/libdvm.so
+busybox cp -f jit/libnativehelper.so /system/lib/libnativehelper.so
+busybox cp -f jit/libcutils.so /system/lib/libcutils.so
+busybox cp -f jit/libdl.so /system/lib/libdl.so
+busybox cp -f jit/liblog.so /system/lib/liblog.so
+busybox cp -f jit/libm.so /system/lib/libm.so
+busybox cp -f jit/libz.so /system/lib/libz.so
 echo "Backing up build.prob file"
 busybox cp -f /system/build.prop /system/build.prop.stock
 echo "Copying build.prop to /system/"
